@@ -114,12 +114,14 @@ export default function AppBanner() {
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
                         <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>
-                            <Box component="img" src="/assets/playlister-logo.png" sx={{width: '150px', marginTop: '15px'}}>
-
+                            <Box 
+                                component="img" 
+                                src="/assets/playlister-logo.png" 
+                                sx={{width: '150px', marginTop: '15px'}}>
                             </Box>
                         </Link>
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}>{}</Box>
                     <Box sx={{ height: "55px", display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"

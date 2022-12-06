@@ -65,7 +65,7 @@ function GlobalStoreContextProvider(props) {
         listNameActive: false,
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
-        currentView: CurrentView.HOME
+        currentView: CurrentView.HOME,
     });
     const history = useHistory();
 
@@ -92,7 +92,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -107,7 +108,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 })
             }
             // CREATE A NEW LIST
@@ -122,7 +124,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -137,7 +140,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -152,7 +156,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
                     listMarkedForDeletion: payload.playlist,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // UPDATE A LIST
@@ -167,7 +172,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // START EDITING A LIST NAME
@@ -182,7 +188,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // 
@@ -197,7 +204,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -211,7 +219,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -225,7 +234,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME
+                    currentView: CurrentView.HOME,
+                    
                 });
             }
             // UPDATE A VIEW
@@ -240,13 +250,16 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: payload
+                    currentView: payload,
+                    
                 });
             }
             default:
                 return store;
         }
     }
+
+
 
     store.setCurrentView = function(newView){
         if(newView === "HOME"){
@@ -271,6 +284,22 @@ function GlobalStoreContextProvider(props) {
             console.log("Setting One User View");
 
         }
+    }
+
+    store.findPlaylistById = function(id){
+        async function asyncFindPlaylistById(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                console.log(playlist);
+                console.log("inside findPlaylistById function");
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: playlist
+                });
+            }
+        }
+        asyncFindPlaylistById(id);
     }
 
     store.tryAcessingOtherAccountPlaylist = function(){

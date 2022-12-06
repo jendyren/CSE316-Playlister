@@ -24,8 +24,10 @@ function Statusbar() {
     console.log("logged in: " +  auth.loggedIn);
     let text ="";
     if (auth.loggedIn){
-        // text = store.currentList.name;
-        text = "hello"
+        if(store.currentList){
+            text = store.currentList.name;
+        } 
+        // text = "hello"
     return (
         <div id="playlister-statusbar">
             {text}

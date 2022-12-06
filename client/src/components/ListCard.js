@@ -14,6 +14,8 @@ import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import EditToolbar from './EditToolbar';
+import {Link} from '@mui/material';
+import WorkspaceScreen from './WorkspaceScreen'
 
 
 /*
@@ -29,7 +31,7 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
     const [expanded, setExpanded] = useState(false);
-    const [expandedId, setExpandedId] = useState(-1);
+    // const [expandedId, setExpandedId] = useState(-1);
 
 
     function handleLoadList(event, id) {
@@ -76,17 +78,21 @@ function ListCard(props) {
             handleToggleEdit(event);
         }
     }
-    // function handleExpandClick(event){
-    //     // handleLoadList(event, idNamePair._id);
-    //     setExpanded(!expanded);  
-    // };
-
     function handleExpandClick(id){
-        console.log("inside handleExpand click");
-        console.log("expandedId: " + expandedId);
-        console.log("Passed in id: " + id);
-        setExpandedId(expandedId === id ? -1 : id);
+        // handleLoadList(event, idNamePair._id);
+        setExpanded(!expanded);
+        store.findPlaylistById(id);  
+        console.log(store.currentList);
     };
+
+    // function handleExpandClick(id){
+    //     console.log("inside handleExpand click");
+    //     console.log("expandedId: " + expandedId);
+    //     console.log("Passed in id: " + id);
+    //     store.findPlaylistById(id);
+    //     console.log(store.foundList);
+    //     setExpandedId(expandedId === id ? -1 : id);
+    // };
 
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -109,6 +115,11 @@ function ListCard(props) {
         flexDirection:'column'
     }
 
+    let workspace=""
+    if(store.currentList){
+        workspace = <WorkspaceScreen/>
+    }
+
     let cardElement =
         <Card
             id={idNamePair._id}
@@ -126,7 +137,15 @@ function ListCard(props) {
                         {idNamePair.name}
                     </Box>
                     <Box sx={{fontSize: '0.2em'}}>
-                        {idNamePair.userName}
+                        By {idNamePair.userName}
+                    </Box>
+                    <Box sx={{display:'flex', flexDirection:'row'}}>
+                        <Box sx={{fontSize: '0.2em', marginRight: '50%'}}>
+                            Published {idNamePair.listens}
+                        </Box>
+                        <Box sx={{fontSize: '0.2em'}}>
+                            Listens {idNamePair.listens}
+                        </Box>
                     </Box>
                 </Box>
                 <Box>
@@ -135,7 +154,7 @@ function ListCard(props) {
                         onClick={() => {
                             handleExpandClick(idNamePair._id)
                         }}
-                        aria-expanded={expandedId === idNamePair._id}
+                        aria-expanded={expanded}
                         sx={{textAlign: 'right'}}>
                         <KeyboardDoubleArrowDownIcon 
                             aria-label="show more"
@@ -145,8 +164,9 @@ function ListCard(props) {
                 </Box>
             </Box>
             
-            <Collapse in={expandedId === idNamePair._id} timeout="auto" unmountOnExit>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent sx={{width: '100%', fontSize: '0.5em'}}>
+                    {workspace}
                     <EditToolbar
                         idNamePair={idNamePair}
                     />

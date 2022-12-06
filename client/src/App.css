@@ -72,6 +72,7 @@ body {
 
 #edit-toolbar {
   background-color: transparent;
+  width: 90%;
 }
 
 .playlister-button,

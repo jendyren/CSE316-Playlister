@@ -25,25 +25,36 @@ const HomeScreen = () => {
 
 
     let listSection = ""
-    switch (store.currentView) {
-        case 'HOME':
-          console.log('HOMEEEEEEEEEEEEEEE');
-          break;
-        case 'ALL_USER':
-          console.log('ALL_USERRRRRRRRRRRR');
-          break;
-        case 'ONE_USER':
-          console.log('ONE_USERRRRRRRRRRRR');
-          break;
-    }
-    return (
+    const homeListSection = (
         <>
-        <HomeBanner/>
         <Box sx={{display:'flex', flexDirection:'row'}}>
             <ListSection/>
             <YoutubeSection/>
         </Box>
         <AddPlaylist/>
+        </>
+    );
+
+    switch (store.currentView) {
+        case 'HOME':
+          console.log('HOMEEEEEEEEEEEEEEE');
+          listSection = homeListSection;
+          break;
+        case 'ALL_USER':
+          console.log('ALL_USERRRRRRRRRRRR');
+        //   listSection = homeListSection;
+          break;
+        case 'ONE_USER':
+          console.log('ONE_USERRRRRRRRRRRR');
+        //   listSection = homeListSection;
+          break;
+    }
+    return (
+        <>
+        <HomeBanner/>
+        <Box>
+            {listSection}
+        </Box>
         </>
     )
 }

@@ -43,14 +43,12 @@ export default function HomeBanner() {
         alignItems: 'center',
         textAlign: 'center'
     }
-
     const sortStyle = {
         width: '25%',
         textAlign: 'center',
         display: 'flex',
         flexDirection:'row'
     }
-
     const homeBannerStyle ={
         marginTop: '5px',
         display: 'flex',
@@ -59,7 +57,6 @@ export default function HomeBanner() {
         postion: 'relative',
         zIndex: '9'
     }
-
 
     function handleHomeButton() {
         console.log("Handling Home Button");
@@ -101,12 +98,17 @@ export default function HomeBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}><Link to='/login/'>By Creation Date (Old-New)</Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>By Last Edit Date (New-Old) </Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>By Name (A-Z) </Link></MenuItem>
+            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}>
+                By Creation Date (Old-New)
+            </MenuItem>
+            <MenuItem component={Link} to='/register/' onClick={handleMenuClose}>
+                By Last Edit Date (New-Old)
+            </MenuItem>
+            <MenuItem component={Link} to='/register/' onClick={handleMenuClose}>
+                By Name (A-Z)
+            </MenuItem>
         </Menu>
     );
-
     const sortByMenuAll = (
         <Menu
             anchorEl={anchorEl}
@@ -123,11 +125,21 @@ export default function HomeBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}><Link to='/login/'>Name (A-Z)</Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>Publish Date (Newest) </Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>Listens (High - Low) </Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>Likes (High - Low) </Link></MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}><Link to='/register/'>Dislikes (High - Low) </Link></MenuItem>
+            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}>
+                Name (A-Z)
+            </MenuItem>
+            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+                Publish Date (Newest) 
+            </MenuItem>
+            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+                Listens (High - Low) 
+            </MenuItem>
+            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+                Likes (High - Low)
+            </MenuItem>
+            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+                Dislikes (High - Low)
+            </MenuItem>
         
         </Menu>
     );
