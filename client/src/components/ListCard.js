@@ -131,7 +131,7 @@ function ListCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}
         >
-            <Box sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
+            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
                 <Box sx={{ width:'100%', display:'flex', flexDirection:'column', paddingTop: '10px'}}>
                     <Box sx={{fontSize: '0.5em'}}>
                         {idNamePair.name}
@@ -162,10 +162,9 @@ function ListCard(props) {
                         />
                     </IconButton>
                 </Box>
-            </Box>
-            
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent sx={{width: '100%', fontSize: '0.5em'}}>
+            </CardContent>
+            <Collapse in={expanded}  timeout="auto" unmountOnExit>
+                <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
                     {workspace}
                     <EditToolbar
                         idNamePair={idNamePair}

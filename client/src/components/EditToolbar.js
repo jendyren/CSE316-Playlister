@@ -38,6 +38,7 @@ function EditToolbar(props) {
     }
 
     return (
+        <>
         <div id="edit-toolbar">
             <Box sx={{display:'flex', flexDirection:"column", backgroundColor: 'white'}}>
                 <Button
@@ -82,6 +83,8 @@ function EditToolbar(props) {
             
             
         </div>
+        </>
+        
     )
 }
 
