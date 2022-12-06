@@ -31,7 +31,9 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
+    SET_CURRENT_SONG: "SET_CURRENT_SONG"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -238,6 +240,21 @@ function GlobalStoreContextProvider(props) {
                     
                 });
             }
+            case GlobalStoreActionType.SET_CURRENT_SONG: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: payload.currentSongIndex,
+                    currentSong: payload.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME,
+                    
+                });
+            }
             // UPDATE A VIEW
             case GlobalStoreActionType.SET_CURRENT_VIEW: {
                 return setStore({
@@ -259,7 +276,12 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-
+    store.setCurrentSong = (songIndex, currentSong) => {
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_SONG,
+            payload: {currentSongIndex: songIndex, currentSong: currentSong}
+        });        
+    }
 
     store.setCurrentView = function(newView){
         if(newView === "HOME"){

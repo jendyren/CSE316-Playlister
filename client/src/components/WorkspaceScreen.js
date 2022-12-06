@@ -6,14 +6,16 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { GlobalStoreContext } from '../store/index.js'
+import EditToolbar from './EditToolbar.js'
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
     
     @author McKilla Gorilla
 */
-function WorkspaceScreen() {
+function WorkspaceScreen(props) {
     const { store } = useContext(GlobalStoreContext);
+    const {idNamePair} = props;
     store.history = useHistory();
     
     let modalJSX = "";
@@ -39,7 +41,10 @@ function WorkspaceScreen() {
                     />
                 ))  
             }
-         </List>            
+         </List>
+         <EditToolbar
+            idNamePair={idNamePair}
+            />      
          { modalJSX }
          </Box>
     )

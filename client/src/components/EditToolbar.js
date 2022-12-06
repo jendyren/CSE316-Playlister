@@ -17,6 +17,9 @@ function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
     const { idNamePair } = props;
 
+    console.log("Inside Edit Toolbar");
+    console.log(idNamePair);
+
     function handleAddNewSong() {
         store.addNewSong();
     }

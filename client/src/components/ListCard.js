@@ -75,6 +75,7 @@ function ListCard(props) {
         
     function handleDoubleClick(event) {
         if (event.detail === 2) {
+            event.stopPropagation();
             handleToggleEdit(event);
         }
     }
@@ -117,7 +118,9 @@ function ListCard(props) {
 
     let workspace=""
     if(store.currentList){
-        workspace = <WorkspaceScreen/>
+        workspace = <WorkspaceScreen
+                        idNamePair={idNamePair}
+                    />
     }
 
     let cardElement =
@@ -166,9 +169,6 @@ function ListCard(props) {
             <Collapse in={expanded}  timeout="auto" unmountOnExit>
                 <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
                     {workspace}
-                    <EditToolbar
-                        idNamePair={idNamePair}
-                    />
                 </CardContent>
             </Collapse>
         </Card>

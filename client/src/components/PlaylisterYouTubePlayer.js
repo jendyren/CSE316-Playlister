@@ -4,6 +4,14 @@ import { useState } from 'react';
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store/index.js'
 
+import {Box, Typography} from '@mui/material';
+import {IconButton} from '@mui/material';
+import StopRoundedIcon from '@mui/icons-material/StopRounded';
+import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
+import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
+
 export default function YouTubePlayerExample() {
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
@@ -22,9 +30,6 @@ export default function YouTubePlayerExample() {
             "8UbNbor3OqQ"
         ]
     }
-    
-
-    
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
@@ -90,9 +95,44 @@ export default function YouTubePlayerExample() {
         }
     }
 
-    return <YouTube
+    return (
+        <>
+        <YouTube
         videoId={playlist[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
-        onStateChange={onPlayerStateChange} />;
+        onStateChange={onPlayerStateChange} />
+
+        <Typography>Now Playing</Typography>
+            <Box sx={{textAlign: 'left', padding:'10px'}}>
+                <Typography>
+                    Playlist: {(store.currentList)? store.currentList.name :''}
+                </Typography>
+                <Typography>
+                    Song #: 
+                </Typography>
+                <Typography>
+                    Song Title: 
+                </Typography>
+                <Typography>
+                    Artist: 
+                </Typography>
+            </Box>
+            <Box sx={{backgroundColor: 'white', margin:'10px'}}>
+                <IconButton>
+                    <SkipPreviousRoundedIcon/>
+                </IconButton>
+                <IconButton>
+                    <StopRoundedIcon/>
+                </IconButton>
+                <IconButton>
+                    <PlayArrowRounded/>
+                </IconButton>
+                <IconButton>
+                    <SkipNextRoundedIcon/>
+                </IconButton>
+            </Box>
+        </>
+        
+    );
 }
