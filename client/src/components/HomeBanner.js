@@ -46,7 +46,9 @@ export default function HomeBanner() {
         marginTop: '5px',
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        postion: 'relative',
+        zIndex: '9'
     }
 
     return(

@@ -20,7 +20,7 @@
 }
 
 body {
-  /* background-image: url('https://thumbs.dreamstime.com/b/music-notes-symbols-seamless-pattern-design-fully-editable-fill-background-color-music-notes-symbols-seamless-pattern-118273669.jpg') */
+  background-image: url('https://img.freepik.com/free-photo/sunset-background-pastel-sky_53876-129041.jpg?w=2000')
 }
 
 #root {
@@ -411,7 +411,29 @@ input {
 
 }
 
+#playlist-selector {
+	position: relative;
+  width: 50%;
+}
 
+#playlist-workspace {
+  position: relative;
+	height: 72vh;
+  width: 50%;
+	background-color: rgb(0, 166, 255);
+}
+
+#youtube-workspace {
+  position: relative;
+  width: 50%;
+	height: 72vh;
+	background-color: rgb(88, 192, 49);
+  text-align: center;
+}
+
+#youtube-workspace iframe {
+	width: 95%;
+}
 /* ANIMATIONS
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 [data-animation] .modal-dialog {

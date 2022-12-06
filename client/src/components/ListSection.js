@@ -44,7 +44,7 @@ const ListSection = () => {
             </List>;
     }
     return (
-        <div id="playlist-selector">
+        <div id="playlist-workspace">
             <div id="list-selector-heading">
             <Fab sx={{transform:"translate(-20%, 0%)"}}
                 color="primary" 

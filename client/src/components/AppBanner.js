@@ -105,7 +105,7 @@ export default function AppBanner() {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="relative" sx={{zIndex: '20'}}>
+            <AppBar position="relative" sx={{zIndex: '10'}}>
                 <Toolbar sx={{backgroundColor: 'white'}}>
                     <Typography                        
                         variant="h4"
