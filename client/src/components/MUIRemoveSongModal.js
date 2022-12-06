@@ -15,7 +15,7 @@ const style1 = {
     width: 345,
     height: 250,
     backgroundSize: "contain",
-    backgroundImage: `url(https://i.insider.com/602ee9ced3ad27001837f2ac?})`,
+    backgroundImage: `url(https://static.vecteezy.com/system/resources/previews/008/135/677/large_2x/sky-and-clouds-on-a-beautiful-pastel-background-abstract-sweet-dreamy-colored-sky-background-free-photo.JPG)`,
     border: '3px solid #000',
     padding: '20px',
     boxShadow: 24,

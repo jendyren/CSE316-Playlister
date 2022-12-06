@@ -4,6 +4,7 @@ import ListSection from './ListSection';
 import HomeBanner from './HomeBanner'
 import YoutubeSection from './YoutubeSection';
 import Box from '@mui/material/Box';
+import Statusbar from './Statusbar';
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
@@ -15,7 +16,7 @@ const HomeScreen = () => {
             <ListSection/>
             <YoutubeSection/>
         </Box>
-        
+        <Statusbar/>
         </>
     )
 }
