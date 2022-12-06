@@ -7,6 +7,15 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Collapse from '@mui/material/Collapse';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import EditToolbar from './EditToolbar';
+
+
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -19,6 +28,9 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    const [expanded, setExpanded] = useState(false);
+    const [expandedId, setExpandedId] = useState(-1);
+
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -47,13 +59,6 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
-    async function handleDeleteList(event, id) {
-        event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
-    }
-
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
@@ -71,6 +76,17 @@ function ListCard(props) {
             handleToggleEdit(event);
         }
     }
+    // function handleExpandClick(event){
+    //     // handleLoadList(event, idNamePair._id);
+    //     setExpanded(!expanded);  
+    // };
+
+    function handleExpandClick(id){
+        console.log("inside handleExpand click");
+        console.log("expandedId: " + expandedId);
+        console.log("Passed in id: " + id);
+        setExpandedId(expandedId === id ? -1 : id);
+    };
 
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -80,27 +96,63 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+    const cardStyle = {
+        borderRadius:"25px", 
+        p: "10px", 
+        bgcolor: '#8000F00F', 
+        marginTop: '15px', 
+        display: 'flex', 
+        p: 1, 
+        fontSize: '0.5em',
+        display:'flex', 
+        flexDirection:'column'
+    }
+
     let cardElement =
-        <ListItem
+        <Card
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+            sx={cardStyle}
             style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
-            button
             onClick={handleDoubleClick}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
-                </IconButton>
+            <Box sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
+                <Box sx={{ width:'100%', display:'flex', flexDirection:'column', paddingTop: '10px'}}>
+                    <Box sx={{fontSize: '0.5em'}}>
+                        {idNamePair.name}
+                    </Box>
+                    <Box sx={{fontSize: '0.2em'}}>
+                        {idNamePair.userName}
+                    </Box>
+                </Box>
+                <Box>
+                    <IconButton 
+                        aria-label="expand" 
+                        onClick={() => {
+                            handleExpandClick(idNamePair._id)
+                        }}
+                        aria-expanded={expandedId === idNamePair._id}
+                        sx={{textAlign: 'right'}}>
+                        <KeyboardDoubleArrowDownIcon 
+                            aria-label="show more"
+                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'}}
+                        />
+                    </IconButton>
+                </Box>
             </Box>
-        </ListItem>
+            
+            <Collapse in={expandedId === idNamePair._id} timeout="auto" unmountOnExit>
+                <CardContent sx={{width: '100%', fontSize: '0.5em'}}>
+                    <EditToolbar
+                        idNamePair={idNamePair}
+                    />
+                </CardContent>
+            </Collapse>
+        </Card>
 
     if (editActive) {
         cardElement =

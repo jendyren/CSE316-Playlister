@@ -45,6 +45,12 @@ const CurrentModal = {
     ERROR : "ERROR"
 }
 
+const CurrentView = {
+    HOME : "HOME",
+    ALL_USER : "ALL_USER",
+    ONE_USER : "ONE_USER",
+}
+
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
@@ -58,7 +64,8 @@ function GlobalStoreContextProvider(props) {
         newListCounter: 0,
         listNameActive: false,
         listIdMarkedForDeletion: null,
-        listMarkedForDeletion: null
+        listMarkedForDeletion: null,
+        currentView: CurrentView.HOME
     });
     const history = useHistory();
 
@@ -84,7 +91,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -98,7 +106,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 })
             }
             // CREATE A NEW LIST
@@ -112,7 +121,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -126,7 +136,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -140,7 +151,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
-                    listMarkedForDeletion: payload.playlist
+                    listMarkedForDeletion: payload.playlist,
+                    currentView: CurrentView.HOME
                 });
             }
             // UPDATE A LIST
@@ -154,7 +166,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             // START EDITING A LIST NAME
@@ -168,7 +181,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             // 
@@ -182,7 +196,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -195,7 +210,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -208,11 +224,52 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    currentView: CurrentView.HOME
+                });
+            }
+            // UPDATE A VIEW
+            case GlobalStoreActionType.SET_CURRENT_VIEW: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: payload
                 });
             }
             default:
                 return store;
+        }
+    }
+
+    store.setCurrentView = function(newView){
+        if(newView === "HOME"){
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_VIEW,
+                payload: CurrentView.HOME
+            });
+            console.log("Setting Home View");
+        }else if(newView === "ALL_USER"){
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_VIEW,
+                payload: CurrentView.ALL_USER
+            });
+            console.log("Setting All User View");
+
+        }
+        else if(newView === "ONE_USER"){
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_VIEW,
+                payload: CurrentView.ONE_USER
+            });
+            console.log("Setting One User View");
+
         }
     }
 

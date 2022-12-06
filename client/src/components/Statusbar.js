@@ -18,9 +18,6 @@ function Statusbar() {
     function clickHandler() {
         store.tryAcessingOtherAccountPlaylist();
     }
-    function handleCreateNewList() {
-        store.createNewList();
-    }
 
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -30,22 +27,9 @@ function Statusbar() {
         // text = store.currentList.name;
         text = "hello"
     return (
-        <>
         <div id="playlister-statusbar">
             {text}
         </div>
-        <div id="list-selector-heading">
-        <Fab sx={{transform:"translate(-20%, 0%)"}}
-            color="primary" 
-            aria-label="add"
-            id="add-list-button"
-            onClick={handleCreateNewList}
-        >
-            <AddIcon />
-        </Fab>
-            Your Playlists
-        </div>
-        </>
         
     );
     }
