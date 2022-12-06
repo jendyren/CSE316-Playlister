@@ -21,15 +21,28 @@ const HomeScreen = () => {
     console.log("Updated View is: ");
     console.log(store.currentView);
     console.log("*********************");
+    console.log(store.currentList);
 
+    let currentPlaylist = {
+        _id: Number,
+        name: String, 
+        songs: Object,
+    }
 
+    if(store.currentList){
+        currentPlaylist._id = store.currentList._id;
+        currentPlaylist.name = store.currentList.name;
+        currentPlaylist.songs = store.currentList.songs;
+    }
 
     let listSection = ""
     const homeListSection = (
         <>
         <Box sx={{display:'flex', flexDirection:'row'}}>
             <ListSection/>
-            <YoutubeSection/>
+            <YoutubeSection
+                currentPlaylist={currentPlaylist}
+            />
         </Box>
         <AddPlaylist/>
         </>

@@ -81,6 +81,14 @@ function EditToolbar(props) {
                         variant="contained">
                             Delete
                     </Button>
+                    <Button
+                        id='duplicate-button' 
+                        onClick={(event) => {
+                                    handleDeleteList(event, idNamePair._id)
+                                }} 
+                        variant="contained">
+                            Duplicate
+                    </Button>
                 </Box>
             </Box>
             

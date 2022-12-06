@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import PlaylisterYouTubePlayer from './PlaylisterYouTubePlayer'
 import {Box, Typography} from '@mui/material';
@@ -8,27 +8,22 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
-import {IconButton} from '@mui/material';
-import StopRoundedIcon from '@mui/icons-material/StopRounded';
-import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
-import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
-
 const YoutubeSection = (props) => {
-    // const tabStyle = {
-    //     // width: '100%',
-    //     // float: 'left',
-    //     // height: '65vh',
-    //     // padding: '0'
-    // }
     const { store } = useContext(GlobalStoreContext);
     const [value, setValue] = useState('1');
+
+    const {currentPlaylist} = props;
+
+    console.log("++++++++++++++++++++");
+    console.log("Current Playlist is: ");
+    console.log(currentPlaylist);
+    
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     console.log(store.currentList);
+
 
     return (
         <>
@@ -42,7 +37,9 @@ const YoutubeSection = (props) => {
                     </TabList>
                 </Box>
                 <TabPanel value="1">
-                    <PlaylisterYouTubePlayer />
+                    <PlaylisterYouTubePlayer 
+                        currentPlaylist={currentPlaylist}
+                    />
                     
                 </TabPanel>
                 <TabPanel value="2">Item Two</TabPanel>

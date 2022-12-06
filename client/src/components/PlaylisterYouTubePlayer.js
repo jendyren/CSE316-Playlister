@@ -11,14 +11,18 @@ import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
+import {Button} from '@mui/material';
 
-export default function YouTubePlayerExample() {
+export default function YouTubePlayerExample(props) {
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
     // FROM ONE SONG TO THE NEXT
 
     const { store } = useContext(GlobalStoreContext);
+
+    const {currentPlaylist} = props;
+    
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = ["HJ6-K3uxUEg"];
 
@@ -95,6 +99,14 @@ export default function YouTubePlayerExample() {
         }
     }
 
+    function displayCurrentPlaylist(){
+        console.log(currentPlaylist);
+        console.log(currentSong);
+        if(currentPlaylist.songs){
+            console.log(currentPlaylist.songs[currentSong]);
+        }
+        
+    }
     return (
         <>
         <YouTube
@@ -108,14 +120,15 @@ export default function YouTubePlayerExample() {
                 <Typography>
                     Playlist: {(store.currentList)? store.currentList.name :''}
                 </Typography>
+                {/* <Button onClick={displayCurrentPlaylist}>HERE</Button> */}
                 <Typography>
-                    Song #: 
+                    Song #:  {currentSong + 1}
                 </Typography>
                 <Typography>
-                    Song Title: 
+                    Song Title: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].title :''}
                 </Typography>
                 <Typography>
-                    Artist: 
+                    Artist: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].artist :''}
                 </Typography>
             </Box>
             <Box sx={{backgroundColor: 'white', margin:'10px'}}>
