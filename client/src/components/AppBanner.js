@@ -94,21 +94,33 @@ export default function AppBanner() {
         else
             return <AccountCircle />;
     }
+    const buttonStyle = {
+        background: "var(--red)",
+        width: '55px',
+        '&:hover': {
+            backgroundColor: 'var(--darkred)',
+            color: 'white',
+        },
+    }
 
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar sx={{backgroundColor: 'white'}}>
                     <Typography                        
                         variant="h4"
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>
+                            <Box component="img" src="/assets/playlister-logo.png" sx={{width: '150px', marginTop: '15px'}}>
+
+                            </Box>
+                        </Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ height: "55px", display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
                             edge="end"
@@ -117,6 +129,7 @@ export default function AppBanner() {
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            sx={buttonStyle}
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>
