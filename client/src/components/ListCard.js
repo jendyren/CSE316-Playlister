@@ -33,7 +33,6 @@ function ListCard(props) {
     const [expanded, setExpanded] = useState(false);
     // const [expandedId, setExpandedId] = useState(-1);
 
-
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {

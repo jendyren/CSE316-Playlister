@@ -21,11 +21,12 @@ const ListSection = () => {
         listCard = 
             <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
             {
-                store.idNamePairs.map((pair) => (
+                store.idNamePairs.map((pair, id) => (
                     <ListCard
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        cardId={id}
                     />
                 ))
                 

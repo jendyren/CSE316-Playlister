@@ -120,6 +120,7 @@ getPlaylistById = async (req, res) => {
         asyncFindUser(list);
     }).catch(err => console.log(err))
 }
+
 getPlaylistPairs = async (req, res) => {
     if(auth.verifyUser(req) === null){
         return res.status(400).json({
@@ -151,9 +152,14 @@ getPlaylistPairs = async (req, res) => {
                         let pair = {
                             _id: list._id,
                             name: list.name,
-                            // ownerEmail: list.ownerEmail,
+                            ownerEmail: list.ownerEmail,
                             userName: list.userName,
-                            songs: list.songs
+                            songs: list.songs,
+                            isPublished: list.isPublished,
+                            likes: list.likes,
+                            dislikes: list.dislikes,
+                            listens: list.listens,
+                            comments: list.comments,
                         };
                         pairs.push(pair);
                     }
@@ -164,6 +170,44 @@ getPlaylistPairs = async (req, res) => {
         asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
+
+getPublicPlaylistPairs = async (req, res) => {
+    console.log("getting published playlist pairs");
+    await Playlist.findOne({isPublished: true }, (err, playlists) => {
+        async function asyncReturnPublicPairs() {
+            console.log("Playlists: " + JSON.stringify(playlists));
+            if (err) {
+                return res.status(400).json({ success: false, error: err })
+            }
+            else {
+                console.log("Send the Playlist pairs");
+                // PUT ALL THE LISTS INTO ID, NAME PAIRS
+                let pairs = [];
+                for (let key in playlists) {
+                    let list = playlists[key];
+                    let pair = {
+                        _id: list._id,
+                        name: list.name,
+                        ownerEmail: list.ownerEmail,
+                        userName: list.userName,
+                        songs: list.songs,
+                        isPublished: list.isPublished,
+                        likes: list.likes,
+                        dislikes: list.dislikes,
+                        listens: list.listens,
+                        comments: list.comments,
+                        datePublished: list.datePublished,
+                        dateEdited: list.dateEdited,
+                    };
+                    pairs.push(pair);
+                }
+                return res.status(200).json({ success: true, idNamePairs: pairs })
+            }
+        }
+        asyncFindList(user.email);
+    }).catch(err => console.log(err))
+}
+
 getPlaylists = async (req, res) => {
     if(auth.verifyUser(req) === null){
         return res.status(400).json({
@@ -252,5 +296,6 @@ module.exports = {
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    getPublicPlaylistPairs
 }

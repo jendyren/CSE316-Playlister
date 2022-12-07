@@ -526,7 +526,28 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
-        asyncLoadIdNamePairs();
+        async function asyncLoadPublicIdNamePairs() {
+            const response = await api.getPublicPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                pairsArray = store.checkForSort(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+
+        if (store.currentView == CurrentView.HOME){
+            asyncLoadIdNamePairs();
+        }else if (store.currentSelection == CurrentView.ALL_USER){
+            asyncLoadPublicIdNamePairs();
+        }else if (store.currentSelection == CurrentView.ONE_USER) {
+            console.log('User Selection');
+        }
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
