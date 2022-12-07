@@ -23,22 +23,21 @@ export default function YouTubePlayerExample(props) {
 
     const {currentPlaylist} = props;
     
-    // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = ["HJ6-K3uxUEg"];
-
-    console.log(store.currentList);
-    if(store.currentList){
-        playlist = [
-            "HJ6-K3uxUEg",
-            "8RbXIMZmVv8",
-            "8UbNbor3OqQ"
-        ]
-    }
-
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong = 0;
+    
     let [player, setPlayer] = useState({});
+    let [currentSong, setCurrentSong] = useState(0);
+    let [title, setTitle] = useState("");
+    let [artist, setArtist] = useState("");
 
+    // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
+    let playlist = [];
+    console.log(store.currentList);
+    if(store.currentList && currentPlaylist.songs){
+        let songList = currentPlaylist.songs;
+        playlist = songList.map(song => song.youTubeId)
+        console.log(playlist);
+    }
 
     const playerOptions = {
         height: '390',
@@ -52,15 +51,36 @@ export default function YouTubePlayerExample(props) {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = (currentPlaylist.songs[currentSong]) ? currentPlaylist.songs[currentSong].youTubeId : "";
+        console.log(song);
         player.loadVideoById(song);
         player.playVideo();
     }
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        currentSong++;
-        currentSong = currentSong % playlist.length;
+        if(currentSong <= currentPlaylist.songs.length){
+            currentSong++;
+            // currentSong = currentSong % playlist.length;
+            setCurrentSong(currentSong);
+            let newTitle = currentPlaylist.songs[currentSong].title;
+            let newArtist = currentPlaylist.songs[currentSong].artist;
+            setTitle(newTitle);
+            setArtist(newArtist);
+        }    
+    }
+
+    // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
+    function decSong() {
+        if(currentSong > 0){
+            currentSong--;
+            // currentSong = currentSong % playlist.length;
+            setCurrentSong(currentSong);
+            let newTitle = currentPlaylist.songs[currentSong].title;
+            let newArtist = currentPlaylist.songs[currentSong].artist;
+            setTitle(newTitle);
+            setArtist(newArtist);
+        }
     }
 
     function onPlayerReady(event) {
@@ -69,11 +89,37 @@ export default function YouTubePlayerExample(props) {
         event.target.playVideo();
     }
 
+    function handleNextSong(player){
+        console.log("Handling moving to next song");
+        incSong();
+        loadAndPlayCurrentSong(player);
+    }
+
+    function handlePreviousSong(player){
+        console.log("Handling moving previous song");
+        decSong()
+        loadAndPlayCurrentSong(player);
+    }
+
+    function handleStopPlayer(){
+        player.player.pauseVideo();
+        console.log("Handling stopping player");
+
+    }
+
+    function handlePlayPlayer(){
+        player.player.playVideo();
+        console.log("Handling playing player");
+
+    }
+
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
     // CHANGES. NOTE THAT playerStatus WILL HAVE A DIFFERENT INTEGER
     // VALUE TO REPRESENT THE TYPE OF STATE CHANGE. A playerStatus
     // VALUE OF 0 MEANS THE SONG PLAYING HAS ENDED.
     function onPlayerStateChange(event) {
+        console.log("EVENT HERE*****")
+        console.log(event);
         let playerStatus = event.data;
         let player = event.target;
         if (playerStatus === -1) {
@@ -99,14 +145,62 @@ export default function YouTubePlayerExample(props) {
         }
     }
 
-    function displayCurrentPlaylist(){
-        console.log(currentPlaylist);
-        console.log(currentSong);
-        if(currentPlaylist.songs){
-            console.log(currentPlaylist.songs[currentSong]);
-        }
-        
+    //If no playlist is selected, the youtubePlayerview will display different screens
+    let youtubePlayerView = "";
+    if(store.currentList){
+        youtubePlayerView = 
+        <>
+        <Typography>Now Playing</Typography>
+        <Box sx={{textAlign: 'left', padding:'10px'}}>
+            <Typography>
+                Playlist: {(store.currentList)? store.currentList.name :''}
+            </Typography>
+            {/* <Button onClick={displayCurrentPlaylist}>HERE</Button> */}
+            <Typography>
+                Song #:  {currentSong + 1}
+            </Typography>
+            <Typography>
+                Song Title: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].title : title}
+            </Typography>
+            <Typography>
+                Artist: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].artist : artist}
+            </Typography>
+        </Box>
+        <Box sx={{backgroundColor: 'white', margin:'10px'}}>
+            <IconButton 
+                onClick={(event) => {
+                    event.stopPropagation();
+                    console.log("*HERE HERE*")
+                    console.log(event);
+                    handlePreviousSong(player.player)
+                }
+                }>
+                <SkipPreviousRoundedIcon/>
+            </IconButton>
+            <IconButton onClick={handleStopPlayer}>
+                <StopRoundedIcon/>
+            </IconButton>
+            <IconButton 
+                onClick={handlePlayPlayer}>
+                <PlayArrowRounded/>
+            </IconButton>
+            <IconButton 
+                onClick={
+                    (event) => {
+                        event.stopPropagation();
+                        console.log("*HERE HERE*")
+                        console.log(event);
+                        handleNextSong(player.player)
+                    }
+                }>
+                <SkipNextRoundedIcon/>
+            </IconButton>
+        </Box>
+        </>
+    }else{
+        youtubePlayerView = <Typography>Select a playlist to begin playing</Typography>
     }
+
     return (
         <>
         <YouTube
@@ -115,36 +209,7 @@ export default function YouTubePlayerExample(props) {
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />
 
-        <Typography>Now Playing</Typography>
-            <Box sx={{textAlign: 'left', padding:'10px'}}>
-                <Typography>
-                    Playlist: {(store.currentList)? store.currentList.name :''}
-                </Typography>
-                {/* <Button onClick={displayCurrentPlaylist}>HERE</Button> */}
-                <Typography>
-                    Song #:  {currentSong + 1}
-                </Typography>
-                <Typography>
-                    Song Title: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].title :''}
-                </Typography>
-                <Typography>
-                    Artist: {(currentPlaylist.songs[currentSong])? currentPlaylist.songs[currentSong].artist :''}
-                </Typography>
-            </Box>
-            <Box sx={{backgroundColor: 'white', margin:'10px'}}>
-                <IconButton>
-                    <SkipPreviousRoundedIcon/>
-                </IconButton>
-                <IconButton>
-                    <StopRoundedIcon/>
-                </IconButton>
-                <IconButton>
-                    <PlayArrowRounded/>
-                </IconButton>
-                <IconButton>
-                    <SkipNextRoundedIcon/>
-                </IconButton>
-            </Box>
+        {youtubePlayerView}
         </>
         
     );

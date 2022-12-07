@@ -33,7 +33,7 @@ export const GlobalStoreActionType = {
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
-    SET_CURRENT_SONG: "SET_CURRENT_SONG"
+    SET_SORT_BY: "SET_SORT_BY"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -53,6 +53,17 @@ const CurrentView = {
     ONE_USER : "ONE_USER",
 }
 
+const SortBy = {
+    NONE : "NONE",
+    NAME: "NAME",
+    PUBLISH_DATE: "PUBLISH_DATE",
+    CREATION_DATE: "CREATION_DATE",
+    EDIT_DATE: "EDIT_DATE",
+    LISTENS: "LISTENS",
+    LIKES: "LIKES",
+    DISLIKES: "DISLIKES",
+}
+
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
@@ -68,6 +79,7 @@ function GlobalStoreContextProvider(props) {
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
         currentView: CurrentView.HOME,
+        sortSelection: SortBy.NONE
     });
     const history = useHistory();
 
@@ -95,6 +107,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -111,6 +124,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 })
             }
@@ -127,6 +141,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 })
             }
@@ -143,6 +158,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -159,6 +175,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: payload.id,
                     listMarkedForDeletion: payload.playlist,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -175,6 +192,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -191,6 +209,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -207,6 +226,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -222,6 +242,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -237,6 +258,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -252,6 +274,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: CurrentView.HOME,
+                    sortSelection: SortBy.NONE
                     
                 });
             }
@@ -268,7 +291,23 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentView: payload,
-                    
+                    sortSelection: store.sortSelection
+                });
+            }
+            // SORT SELECTION
+            case GlobalStoreActionType.SET_SORT_BY: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    sortSelection: payload
                 });
             }
             default:
@@ -305,6 +344,67 @@ function GlobalStoreContextProvider(props) {
             });
             console.log("Setting One User View");
 
+        }
+    }
+
+    store.setSortBy = function(newSort){
+        switch (newSort) {
+            case "NONE":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.NONE
+                });
+                console.log("Setting sort to NONE");
+                break;
+            case "NAME":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.NAME
+                });
+                console.log("Setting sort to NAME");
+                break;
+            case "PUBLISH_DATE":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.PUBLISH_DATE
+                });
+                console.log("Setting sort to PUBLISH_DATE");
+                break;
+            case "CREATION_DATE":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.CREATION_DATE
+                });
+                console.log("Setting sort to CREATION_DATE");
+                break;
+            case "EDIT_DATE":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.EDIT_DATE
+                });
+                console.log("Setting sort to EDIT_DATE");
+                break;
+            case "LISTENS":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.LISTENS
+                });
+                console.log("Setting sort to LISTENS");
+                break;
+            case "LIKES":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.LIKES
+                });
+                console.log("Setting sort to LIKES");
+                break;
+            case "DISLIKES":
+                storeReducer({
+                    type: GlobalStoreActionType.SET_SORT_BY,
+                    payload: CurrentView.LIKES
+                });
+                console.log("Setting sort to DISLIKES");
+                break;
         }
     }
 
