@@ -34,16 +34,18 @@ function EditToolbar(props) {
     function handleClose() {
         store.closeCurrentList();
     }
-    function handlePublish(){
-        let updatedList = store.currentList;
-        idNamePair.isPublished = true;
-        updatedList.isPublished = true;
-        updatedList.datePublished = new Date();
-        console.log("PUBLISHING LIST: ")
-        store.findPlaylistById(idNamePair._id);
-        store.updateCurrentList(updatedList);
-        // store.setCurrentList(idNamePair._id);
-        console.log("Hopefully published");
+    function handlePublish(event){
+        event.stopPropagation();
+        store.publishList();
+        // let updatedList = store.currentList;
+        // idNamePair.isPublished = true;
+        // updatedList.isPublished = true;
+        // updatedList.datePublished = new Date();
+        // console.log("PUBLISHING LIST: ")
+        // store.findPlaylistById(idNamePair._id);
+        // store.updateCurrentList(updatedList);
+        // // store.setCurrentList(idNamePair._id);
+        // console.log("Hopefully published");
     }
 
     function handleDuplicateList(event, id){
@@ -107,7 +109,9 @@ function EditToolbar(props) {
                 <Button 
                     disabled={!store.canClose()}
                     id='publish-button'
-                    onClick={handlePublish}
+                    onClick={(event) => {
+                        handlePublish(event)
+                    }} 
                     variant="contained">
                         Publish
                 </Button>

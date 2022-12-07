@@ -168,7 +168,7 @@ function ListCard(props) {
                     <Box>
                         <Box sx={{display:'flex', flexDirection:'row', marginTop: '20px'}}>
                             <Box sx={{fontSize: '0.2em', marginRight: '50%'}}>
-                                Published {idNamePair.listens}
+                                Published {idNamePair.datePublished}
                             </Box>
                             <Box sx={{fontSize: '0.2em'}}>
                                 Listens {idNamePair.listens}

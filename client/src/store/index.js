@@ -34,7 +34,8 @@ export const GlobalStoreActionType = {
     HIDE_MODALS: "HIDE_MODALS",
     SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
     SET_SORT_BY: "SET_SORT_BY", 
-    DUPLICATE_LIST: "DUPLICATE_LIST"
+    DUPLICATE_LIST: "DUPLICATE_LIST",
+    PUBLISH_LIST: "PUBLISH_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -80,7 +81,9 @@ function GlobalStoreContextProvider(props) {
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
         currentView: CurrentView.HOME,
-        sortSelection: SortBy.NONE
+        sortSelection: SortBy.NONE,
+        listMarkedForDuplication: null,
+        listToBePublished: null
     });
     const history = useHistory();
 
@@ -328,6 +331,24 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDuplication: payload
                 });
             }
+            // PUBLISH A LIST
+            case GlobalStoreActionType.PUBLISH_LIST: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    sortSelection: SortBy.NONE,
+                    listMarkedForDuplication: null,
+                    listToBePublished: payload
+                });
+            }
             default:
                 return store;
         }
@@ -561,12 +582,38 @@ function GlobalStoreContextProvider(props) {
 
         if (store.currentView == CurrentView.HOME){
             asyncLoadIdNamePairs();
+            // asyncLoadPublicIdNamePairs();
         }else if (store.currentSelection == CurrentView.ALL_USER){
             asyncLoadPublicIdNamePairs();
         }else if (store.currentSelection == CurrentView.ONE_USER) {
             console.log('User Selection');
         }
     }
+    store.publishList = function(){
+        async function asyncPublishList() {
+            const publishedDate = new Date();
+            if(store.currentList){
+                store.currentList.isPublished = true;
+                store.currentList.datePublished = publishedDate;
+            }
+
+            const response = await api.publishPlaylist(store.currentList._id, store.currentList);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.PUBLISH_LIST,
+                    payload: store.currentList
+                });
+            }
+        }
+        asyncPublishList();
+        store.loadIdNamePairs();
+        history.push("/");
+        // publishPlaylist();
+        // store.loadIdNamePairs();
+        // tps.clearAllTransactions();
+        // history.push("/");
+    }
+
 
     store.duplicateList = function (id){
         async function getListToDuplicate(id){
