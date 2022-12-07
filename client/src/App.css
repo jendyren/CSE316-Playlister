@@ -71,12 +71,13 @@ body {
 }
 
 #edit-toolbar {
-  background-color: white;
-  width: 100%;
-  position: relative;
-  margin-bottom: 130px;
-  text-align: center;
-  min-height: 85px;
+	background-color: white;
+	width: 100%;
+	position: relative;
+	text-align: center;
+	min-height: 85px;
+	z-index: 5;
+ 
 }
 
 .playlister-button,

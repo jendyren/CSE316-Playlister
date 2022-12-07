@@ -15,13 +15,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import EditToolbar from './EditToolbar';
 import {Link} from '@mui/material';
-import WorkspaceScreen from './WorkspaceScreen'
 
 import { Typography } from '@mui/material';
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import ThumbDownAltRoundedIcon from '@mui/icons-material/ThumbDownAltRounded';
+import WorkspaceScreen from './WorkspaceScreen'
 
 
 /*
@@ -35,7 +35,7 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, expandedId } = props;
     let published = idNamePair.isPublished;
 
     const [expanded, setExpanded] = useState(false);
@@ -111,11 +111,20 @@ function ListCard(props) {
         cardStatus = true;
     }
 
-    const cardStyle = {
+    const publishedCardStyle = {
+        borderRadius:"25px", 
+        p: "10px", 
+        bgcolor: '#8000F02B', 
+        display: 'flex', 
+        p: 1, 
+        fontSize: '0.5em',
+        display:'flex', 
+        flexDirection:'column'
+    }
+    const unpublishedCardStyle = {
         borderRadius:"25px", 
         p: "10px", 
         bgcolor: '#8000F00F', 
-        marginTop: '15px', 
         display: 'flex', 
         p: 1, 
         fontSize: '0.5em',
@@ -123,30 +132,22 @@ function ListCard(props) {
         flexDirection:'column'
     }
 
-    let workspace=""
-    if(store.currentList){
-        workspace = <WorkspaceScreen
-                        idNamePair={idNamePair}
-                        published={published}
-                    />
-    }
 
     let publishedCard = 
         <Card
             id={idNamePair._id}
-            key={idNamePair._id}
-            sx={cardStyle}
-            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+            sx={publishedCardStyle}
+            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt', padding:'0'}}
             onClick={handleDoubleClick}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}
         >
-            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
+            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto',padding:'0'}}>
                 <Box sx={{ width:'100%', display:'flex', flexDirection:'column', paddingTop: '10px'}}>
                     <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}}>
                         <Box>
-                            <Box sx={{fontSize: '0.5em'}}>
+                            <Box sx={{fontSize: '0.3em', fontWeight:'bold'}}>
                                 {idNamePair.name}
                             </Box>
                             <Box sx={{fontSize: '0.2em'}}>
@@ -157,11 +158,15 @@ function ListCard(props) {
                             <IconButton aria-label="like">
                                 <ThumbUpOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
                             </IconButton>
-                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>50</Typography>
+                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>
+                                {idNamePair.likes}
+                            </Typography>
                             <IconButton aria-label="dislike">
                                 <ThumbDownOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
                             </IconButton>
-                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>50</Typography>
+                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>
+                                {idNamePair.dislikes}
+                            </Typography>
                         </Box>
                     </Box>
                    
@@ -175,28 +180,15 @@ function ListCard(props) {
                             </Box>
                         </Box>
                     </Box>
-
-                    
-                </Box>
-                <Box>
-                    <IconButton 
-                        aria-label="expand" 
-                        onClick={() => {
-                            handleExpandClick(idNamePair._id)
-                        }}
-                        aria-expanded={expanded}
-                        sx={{textAlign: 'right'}}>
-                        <KeyboardDoubleArrowDownIcon 
-                            aria-label="show more"
-                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'
-                        }}
-                        />
-                    </IconButton>
+  
                 </Box>
             </CardContent>
-            <Collapse in={expanded}  timeout="auto" unmountOnExit>
+            <Collapse in={expandedId === idNamePair._id}  timeout="auto" unmountOnExit>
                 <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
-                    {workspace}
+                    <WorkspaceScreen
+                        idNamePair={idNamePair}
+                        published={idNamePair.isPublished}
+                    />
                 </CardContent>
             </Collapse>
         </Card>
@@ -204,44 +196,32 @@ function ListCard(props) {
     let unpublishedCard = 
         <Card
             id={idNamePair._id}
-            key={idNamePair._id}
-            sx={cardStyle}
-            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+            sx={unpublishedCardStyle}
+            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt', padding:'0'}}
             onClick={handleDoubleClick}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}
         >
-            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
+            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto', padding:'0'}}>
                 <Box sx={{ width:'100%', display:'flex', flexDirection:'column', paddingTop: '10px'}}>
-                    <Box sx={{fontSize: '0.5em'}}>
+                    <Box sx={{fontSize: '0.3em', fontWeight:"bold"}}>
                         {idNamePair.name}
                     </Box>
                     <Box sx={{fontSize: '0.2em'}}>
                         By {idNamePair.userName}
                     </Box>
                 </Box>
-                <Box>
-                    <IconButton 
-                        aria-label="expand" 
-                        onClick={() => {
-                            handleExpandClick(idNamePair._id)
-                        }}
-                        aria-expanded={expanded}
-                        sx={{textAlign: 'right'}}>
-                        <KeyboardDoubleArrowDownIcon 
-                            aria-label="show more"
-                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'
-                        }}
-                        />
-                    </IconButton>
-                </Box>
             </CardContent>
-            <Collapse in={expanded}  timeout="auto" unmountOnExit>
+            <Collapse in={expandedId === idNamePair._id}  timeout="auto" unmountOnExit>
                 <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
-                    {workspace}
+                    <WorkspaceScreen
+                        idNamePair={idNamePair}
+                        published={idNamePair.isPublished}
+                    />
                 </CardContent>
             </Collapse>
+            
         </Card>
 
 
@@ -273,7 +253,10 @@ function ListCard(props) {
             />
     }
     return (
-        cardElement
+        <>
+        {cardElement}
+        </>
+        
     );
 }
 

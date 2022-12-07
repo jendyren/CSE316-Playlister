@@ -25,28 +25,65 @@ function WorkspaceScreen(props) {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
+
+    let workspaceView = ""
+    if(store.currentList){
+        if(published){
+            workspaceView = 
+            <>
+            <List 
+                id="playlist-cards" 
+                sx={{overflow: 'scroll', width: '100%', bgcolor: 'white', zIndex: '5', height:'240px'}}
+            >
+                {
+                    store.currentList.songs.map((song, index) => (
+                        <SongCard
+                            id={'playlist-song-' + (index)}
+                            key={'playlist-song-' + (index)}
+                            index={index}
+                            song={song}
+                            published={published}
+                        />
+                    ))  
+                }
+            </List>
+            </>
+            
+        }
+        else{
+            workspaceView=
+                <>
+                <Box>
+                    <List 
+                    id="playlist-cards" 
+                    sx={{overflow: 'scroll', width: '100%', bgcolor: 'white', height:'240px'}}
+                    >
+                    {
+                        store.currentList.songs.map((song, index) => (
+                            <SongCard
+                                id={'playlist-song-' + (index)}
+                                key={'playlist-song-' + (index)}
+                                index={index}
+                                song={song}
+                                published={published}
+                            />
+                        ))  
+                    }
+                    </List>
+                </Box>
+                
+                </>
+        }
+    }
+    
+    
     return (
         <Box id="list-selector-list">
-        <List 
-            id="playlist-cards" 
-            sx={{overflow: 'scroll', height: '87%', width: '100%', bgcolor: '#8000F00F'}}
-        >
-            {
-                store.currentList.songs.map((song, index) => (
-                    <SongCard
-                        id={'playlist-song-' + (index)}
-                        key={'playlist-song-' + (index)}
-                        index={index}
-                        song={song}
-                        published={published}
-                    />
-                ))  
-            }
-         </List>
-         <EditToolbar
+        {workspaceView} 
+        <EditToolbar
             idNamePair={idNamePair}
             published={published}
-            />      
+         />     
          { modalJSX }
          </Box>
     )

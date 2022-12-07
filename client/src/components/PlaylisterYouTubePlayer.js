@@ -33,10 +33,14 @@ export default function YouTubePlayerExample(props) {
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
     // console.log(store.currentList);
+    console.log("~~~~~~~~~~~~~~~~~~~~");
+    console.log(store.currentList);
+    console.log(currentPlaylist);
     if(store.currentList && currentPlaylist.songs){
         let songList = currentPlaylist.songs;
+        console.log(songList);
         playlist = songList.map(song => song.youTubeId)
-        // console.log(playlist);
+        console.log(playlist);
     }
 
     const playerOptions = {

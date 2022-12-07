@@ -58,6 +58,26 @@ export default function HomeBanner() {
         zIndex: '9'
     }
 
+    useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
+
+    function handleSearch(event){
+        console.log("Handling Searching Button");
+        let filteredPlaylists = "";
+        console.log(store.idNamePairs);
+        if(event.key === 'Enter'){
+            console.log('You search is: ' + event.target.value)
+            let inputText = event.target.value;
+            filteredPlaylists = store.idNamePairs.filter(playlist => playlist.name.includes(inputText));
+              // display the matching playlists in the UI
+            console.log(filteredPlaylists);
+            filteredPlaylists.forEach(playlist => {
+                console.log(playlist.name); // Happy, Happy Yay
+            });
+        }
+    }
+
     function handleHomeButton() {
         console.log("Handling Home Button");
         store.setCurrentView("HOME");
@@ -180,6 +200,7 @@ export default function HomeBanner() {
                 <TextField
                     id="input-with-icon-textfield"
                     label="Search"
+                    onKeyDown={handleSearch}
                     sx={{width: '60%', margin: 'auto'}}
                     variant="outlined"
                     InputProps={{

@@ -161,7 +161,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME,
+                    currentView: store.currentView,
                     sortSelection: SortBy.NONE
                     
                 });
@@ -195,7 +195,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentView: CurrentView.HOME,
+                    currentView: store.currentView,
                     sortSelection: SortBy.NONE
                     
                 });
@@ -335,7 +335,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.PUBLISH_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: payload.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -346,7 +346,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     sortSelection: SortBy.NONE,
                     listMarkedForDuplication: null,
-                    listToBePublished: payload
+                    listToBePublished: payload.list
                 });
             }
             default:
@@ -581,11 +581,12 @@ function GlobalStoreContextProvider(props) {
         }
 
         if (store.currentView == CurrentView.HOME){
+            console.log("Currently fetching home playlists...");
             asyncLoadIdNamePairs();
-            // asyncLoadPublicIdNamePairs();
-        }else if (store.currentSelection == CurrentView.ALL_USER){
+        }else if (store.currentView == CurrentView.ALL_USER){
+            console.log("Currently fetching all users published playlists...");
             asyncLoadPublicIdNamePairs();
-        }else if (store.currentSelection == CurrentView.ONE_USER) {
+        }else if (store.currentView == CurrentView.ONE_USER) {
             console.log('User Selection');
         }
     }
@@ -599,14 +600,21 @@ function GlobalStoreContextProvider(props) {
 
             const response = await api.publishPlaylist(store.currentList._id, store.currentList);
             if (response.data.success) {
-                storeReducer({
-                    type: GlobalStoreActionType.PUBLISH_LIST,
-                    payload: store.currentList
-                });
+                const response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    console.log(pairsArray);
+                    storeReducer({
+                        type: GlobalStoreActionType.PUBLISH_LIST,
+                        payload: {
+                            list: store.currentList,
+                            idNamePairs: pairsArray
+                        }
+                    });
+                }
             }
         }
         asyncPublishList();
-        store.loadIdNamePairs();
         history.push("/");
         // publishPlaylist();
         // store.loadIdNamePairs();

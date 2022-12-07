@@ -248,6 +248,7 @@ getPublicPlaylistPairs = async (req, res) => {
                 return res.status(200).json({ success: true, idNamePairs: pairs })
             }
         }
+        asyncReturnPublicPairs()
     }).catch(err => console.log(err))
 }
 
@@ -269,6 +270,7 @@ getPlaylists = async (req, res) => {
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
 }
+
 updatePlaylist = async (req, res) => {
     if(auth.verifyUser(req) === null){
         return res.status(400).json({
