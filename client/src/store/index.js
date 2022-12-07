@@ -550,6 +550,19 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.duplicateList = function (id){
+        async function getListToDuplicate(id){
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                storeReducer({
+                    type: GlobalStoreActionType.DUPLICATE_LIST,
+                    payload: {id: id, playlist: playlist}
+                });
+            }
+        }
+        getListToDuplicate(id);
+    }
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,

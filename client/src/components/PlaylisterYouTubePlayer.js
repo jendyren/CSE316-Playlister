@@ -32,11 +32,11 @@ export default function YouTubePlayerExample(props) {
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
-    console.log(store.currentList);
+    // console.log(store.currentList);
     if(store.currentList && currentPlaylist.songs){
         let songList = currentPlaylist.songs;
         playlist = songList.map(song => song.youTubeId)
-        console.log(playlist);
+        // console.log(playlist);
     }
 
     const playerOptions = {
@@ -52,7 +52,7 @@ export default function YouTubePlayerExample(props) {
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
         let song = (currentPlaylist.songs[currentSong]) ? currentPlaylist.songs[currentSong].youTubeId : "";
-        console.log(song);
+        // console.log(song);
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -118,8 +118,8 @@ export default function YouTubePlayerExample(props) {
     // VALUE TO REPRESENT THE TYPE OF STATE CHANGE. A playerStatus
     // VALUE OF 0 MEANS THE SONG PLAYING HAS ENDED.
     function onPlayerStateChange(event) {
-        console.log("EVENT HERE*****")
-        console.log(event);
+        // console.log("EVENT HERE*****")
+        // console.log(event);
         let playerStatus = event.data;
         let player = event.target;
         if (playerStatus === -1) {
@@ -170,8 +170,8 @@ export default function YouTubePlayerExample(props) {
             <IconButton 
                 onClick={(event) => {
                     event.stopPropagation();
-                    console.log("*HERE HERE*")
-                    console.log(event);
+                    // console.log("*HERE HERE*")
+                    // console.log(event);
                     handlePreviousSong(player.player)
                 }
                 }>
@@ -188,8 +188,8 @@ export default function YouTubePlayerExample(props) {
                 onClick={
                     (event) => {
                         event.stopPropagation();
-                        console.log("*HERE HERE*")
-                        console.log(event);
+                        // console.log("*HERE HERE*")
+                        // console.log(event);
                         handleNextSong(player.player)
                     }
                 }>

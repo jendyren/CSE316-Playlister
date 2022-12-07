@@ -15,7 +15,7 @@ import EditToolbar from './EditToolbar.js'
 */
 function WorkspaceScreen(props) {
     const { store } = useContext(GlobalStoreContext);
-    const {idNamePair} = props;
+    const {idNamePair, published} = props;
     store.history = useHistory();
     
     let modalJSX = "";
@@ -38,12 +38,14 @@ function WorkspaceScreen(props) {
                         key={'playlist-song-' + (index)}
                         index={index}
                         song={song}
+                        published={published}
                     />
                 ))  
             }
          </List>
          <EditToolbar
             idNamePair={idNamePair}
+            published={published}
             />      
          { modalJSX }
          </Box>

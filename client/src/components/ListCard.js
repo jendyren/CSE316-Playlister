@@ -17,6 +17,12 @@ import EditToolbar from './EditToolbar';
 import {Link} from '@mui/material';
 import WorkspaceScreen from './WorkspaceScreen'
 
+import { Typography } from '@mui/material';
+import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
+import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
+import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
+import ThumbDownAltRoundedIcon from '@mui/icons-material/ThumbDownAltRounded';
+
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -30,6 +36,8 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    let published = idNamePair.isPublished;
+
     const [expanded, setExpanded] = useState(false);
     // const [expandedId, setExpandedId] = useState(-1);
 
@@ -119,10 +127,81 @@ function ListCard(props) {
     if(store.currentList){
         workspace = <WorkspaceScreen
                         idNamePair={idNamePair}
+                        published={published}
                     />
     }
 
-    let cardElement =
+    let publishedCard = 
+        <Card
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={cardStyle}
+            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+            onClick={handleDoubleClick}
+            // onClick={(event) => {
+            //     handleLoadList(event, idNamePair._id)
+            // }}
+        >
+            <CardContent sx={{ width:'90%', display:'flex', flexDirection:'row', margin:'auto'}}>
+                <Box sx={{ width:'100%', display:'flex', flexDirection:'column', paddingTop: '10px'}}>
+                    <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}}>
+                        <Box>
+                            <Box sx={{fontSize: '0.5em'}}>
+                                {idNamePair.name}
+                            </Box>
+                            <Box sx={{fontSize: '0.2em'}}>
+                                By {idNamePair.userName}
+                            </Box>
+                        </Box>
+                        <Box sx={{ display:'flex', flexDirection:'row'}}>
+                            <IconButton aria-label="like">
+                                <ThumbUpOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
+                            </IconButton>
+                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>50</Typography>
+                            <IconButton aria-label="dislike">
+                                <ThumbDownOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
+                            </IconButton>
+                            <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>50</Typography>
+                        </Box>
+                    </Box>
+                   
+                    <Box>
+                        <Box sx={{display:'flex', flexDirection:'row', marginTop: '20px'}}>
+                            <Box sx={{fontSize: '0.2em', marginRight: '50%'}}>
+                                Published {idNamePair.listens}
+                            </Box>
+                            <Box sx={{fontSize: '0.2em'}}>
+                                Listens {idNamePair.listens}
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    
+                </Box>
+                <Box>
+                    <IconButton 
+                        aria-label="expand" 
+                        onClick={() => {
+                            handleExpandClick(idNamePair._id)
+                        }}
+                        aria-expanded={expanded}
+                        sx={{textAlign: 'right'}}>
+                        <KeyboardDoubleArrowDownIcon 
+                            aria-label="show more"
+                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'
+                        }}
+                        />
+                    </IconButton>
+                </Box>
+            </CardContent>
+            <Collapse in={expanded}  timeout="auto" unmountOnExit>
+                <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
+                    {workspace}
+                </CardContent>
+            </Collapse>
+        </Card>
+
+    let unpublishedCard = 
         <Card
             id={idNamePair._id}
             key={idNamePair._id}
@@ -141,14 +220,6 @@ function ListCard(props) {
                     <Box sx={{fontSize: '0.2em'}}>
                         By {idNamePair.userName}
                     </Box>
-                    <Box sx={{display:'flex', flexDirection:'row'}}>
-                        <Box sx={{fontSize: '0.2em', marginRight: '50%'}}>
-                            Published {idNamePair.listens}
-                        </Box>
-                        <Box sx={{fontSize: '0.2em'}}>
-                            Listens {idNamePair.listens}
-                        </Box>
-                    </Box>
                 </Box>
                 <Box>
                     <IconButton 
@@ -160,7 +231,8 @@ function ListCard(props) {
                         sx={{textAlign: 'right'}}>
                         <KeyboardDoubleArrowDownIcon 
                             aria-label="show more"
-                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'}}
+                            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'
+                        }}
                         />
                     </IconButton>
                 </Box>
@@ -171,6 +243,15 @@ function ListCard(props) {
                 </CardContent>
             </Collapse>
         </Card>
+
+
+    let cardElement = ""
+    if(published){
+        cardElement = publishedCard;
+    }else{
+        cardElement = unpublishedCard
+    }
+       
 
     if (editActive) {
         cardElement =
