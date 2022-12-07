@@ -37,6 +37,21 @@ export const createPlaylist = (newListName, newSongs, userEmail, userName) => {
     })
 }
 
+export const createDuplicatePlaylist = (newListName, newSongs, userEmail, userName) => {
+    return api.post(`/playlist/`, {
+        // SPECIFY THE PAYLOAD
+        name: newListName,
+        ownerEmail: userEmail,
+        userName: userName,
+        songs: newSongs,
+        isPublished: false,
+        likes: 0, 
+        dislikes: 0, 
+        listens: 0,
+        comments: []
+    })
+}
+
 export const getPublicPlaylistPairs = () => api.get('/publicplaylistpairs/')
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
 export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
@@ -54,7 +69,8 @@ const apis = {
     getPlaylistById,
     getPlaylistPairs,
     updatePlaylistById,
-    getPublicPlaylistPairs
+    getPublicPlaylistPairs,
+    createDuplicatePlaylist
 }
 
 export default apis

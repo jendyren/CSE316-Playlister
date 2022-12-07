@@ -33,7 +33,8 @@ export const GlobalStoreActionType = {
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     SET_CURRENT_VIEW: "SET_CURRENT_VIEW",
-    SET_SORT_BY: "SET_SORT_BY"
+    SET_SORT_BY: "SET_SORT_BY", 
+    DUPLICATE_LIST: "DUPLICATE_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -310,6 +311,23 @@ function GlobalStoreContextProvider(props) {
                     sortSelection: payload
                 });
             }
+            // PREPARE TO DUPLICATE A LIST
+            case GlobalStoreActionType.DUPLICATE_LIST: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentView: store.currentView,
+                    sortSelection: SortBy.NONE,
+                    listMarkedForDuplication: payload
+                });
+            }
             default:
                 return store;
         }
@@ -562,6 +580,30 @@ function GlobalStoreContextProvider(props) {
             }
         }
         getListToDuplicate(id);
+
+        async function createDuplicatePlaylist(){
+            let newListName = store.currentList.name;
+            let newSongs = store.currentList.songs;
+            const response = await api.createDuplicatePlaylist(newListName, newSongs, auth.user.email, auth.user.userName);
+            console.log("createDuplicatePlaylist response: " + response);
+            if (response.status === 201) {
+                tps.clearAllTransactions();
+                let newList = response.data.playlist;
+                storeReducer({
+                    type: GlobalStoreActionType.DUPLICATE_LIST,
+                    payload: newList
+                }
+                );
+                store.loadIdNamePairs();
+                tps.clearAllTransactions();
+                history.push("/");
+            }
+            else {
+                console.log("API FAILED TO CREATE A DUPLICATE LIST");
+            }
+        }
+        createDuplicatePlaylist();
+        
     }
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE

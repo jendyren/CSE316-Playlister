@@ -50,6 +50,50 @@ createPlaylist = (req, res) => {
             });
     })
 }
+
+createDuplicatePlaylist = (req, res) => {
+    if(auth.verifyUser(req) === null){
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    const body = req.body;
+    console.log("createDuplicatePlaylist body: " + JSON.stringify(body));
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a Playlist',
+        })
+    }
+    
+    const playlist = new Playlist(body);
+    console.log("playlist: " + playlist.toString());
+    if (!playlist) {
+        return res.status(400).json({ success: false, error: err })
+    }
+
+    User.findOne({ _id: req.userId }, (err, user) => {
+        console.log("user found: " + JSON.stringify(user));
+        user.playlists.push(playlist._id);
+        user
+            .save()
+            .then(() => {
+                playlist
+                    .save()
+                    .then(() => {
+                        return res.status(201).json({
+                            playlist: playlist
+                        })
+                    })
+                    .catch(error => {
+                        return res.status(400).json({
+                            errorMessage: 'Playlist Not Created!'
+                        })
+                    })
+            });
+    })
+}
+
 deletePlaylist = async (req, res) => {
     if(auth.verifyUser(req) === null){
         return res.status(400).json({
@@ -292,6 +336,7 @@ updatePlaylist = async (req, res) => {
 }
 module.exports = {
     createPlaylist,
+    createDuplicatePlaylist,
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,

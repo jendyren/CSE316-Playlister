@@ -48,9 +48,7 @@ function EditToolbar(props) {
 
     function handleDuplicateList(event, id){
         event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
+        store.duplicateList(id);
     }
     
     async function handleDeleteList(event, id) {
@@ -75,8 +73,8 @@ function EditToolbar(props) {
                 <Button
                     id='duplicate-button' 
                     onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} 
+                        handleDuplicateList(event, idNamePair._id)
+                    }} 
                     variant="contained">
                         Duplicate
                 </Button>
