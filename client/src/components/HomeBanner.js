@@ -20,6 +20,9 @@ export default function HomeBanner() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
 
     const homeScreenButtonStyle ={
         width: '25%',
@@ -58,9 +61,6 @@ export default function HomeBanner() {
         zIndex: '9'
     }
 
-    useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
 
     function handleSearch(event){
         console.log("Handling Searching Button");
@@ -80,15 +80,19 @@ export default function HomeBanner() {
 
     function handleHomeButton() {
         console.log("Handling Home Button");
-        store.setCurrentView("HOME");
+        store.setCurrentView("HOME", store.idNamePairs);
+        // store.loadIdNamePairs();
     }
     function handleAllUserButton() {
         console.log("Handling All User Button");
-        store.setCurrentView("ALL_USER");
+        store.setCurrentView("ALL_USER", store.idNamePairs);
+        // store.loadAllPublishedPlaylists();
     }
     function handleOneUserButton() {
         console.log("Handling One User Button");
-        store.setCurrentView("ONE_USER");
+        store.setCurrentView("ONE_USER", store.idNamePairs);
+        // store.loadIdNamePairs();
+
     }
 
     const handleSortByMenuOpen = (event) => {
@@ -99,6 +103,14 @@ export default function HomeBanner() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    function handleSetSort(sortValue){
+        console.log(sortValue);
+        store.setSortBy(sortValue);
+        console.log("setting sort");
+        store.sortList(store.idNamePairs);
+    }
+    
 
     const menuId = 'sort-by-menu';
     let menu = "";
@@ -118,13 +130,19 @@ export default function HomeBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}>
+            <MenuItem onClick={() => {
+                    handleSetSort("CREATION_DATE")
+                }}>
                 By Creation Date (Old-New)
             </MenuItem>
-            <MenuItem component={Link} to='/register/' onClick={handleMenuClose}>
+            <MenuItem onClick={() => {
+                    handleSetSort("EDIT_DATE")
+                }}>
                 By Last Edit Date (New-Old)
             </MenuItem>
-            <MenuItem component={Link} to='/register/' onClick={handleMenuClose}>
+            <MenuItem  onClick={() => {
+                    handleSetSort("NAME")
+                }}>
                 By Name (A-Z)
             </MenuItem>
         </Menu>
@@ -145,19 +163,35 @@ export default function HomeBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem component={Link} to='/login/' onClick={handleMenuClose}>
+            <MenuItem 
+                onClick={() => {
+                    handleSetSort("NAME")
+                }}>
                 Name (A-Z)
             </MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+            
+            <MenuItem 
+                onClick={() => {
+                    handleSetSort("PUBLISH_DATE")
+                }}>
                 Publish Date (Newest) 
             </MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+            <MenuItem 
+                onClick={() => {
+                    handleSetSort("LISTENS")
+                }}>
                 Listens (High - Low) 
             </MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+            <MenuItem 
+                onClick={() => {
+                    handleSetSort("LIKES")
+                }}>
                 Likes (High - Low)
             </MenuItem>
-            <MenuItem component={Link} to='/register/'onClick={handleMenuClose}>
+            <MenuItem  
+                onClick={() => {
+                    handleSetSort("DISLIKES")
+                }}>
                 Dislikes (High - Low)
             </MenuItem>
         
@@ -166,18 +200,14 @@ export default function HomeBanner() {
 
     switch (store.currentView) {
         case 'HOME':
-          console.log('HOMEEEEEEEEEEEEEEE');
           menu = sortByMenuHome;
           console.log('menu set to home');
-
           break;
         case 'ALL_USER':
-          console.log('ALL_USERRRRRRRRRRRR');
           menu = sortByMenuAll;
           console.log('menu set to all');
           break;
         case 'ONE_USER':
-          console.log('ONE_USERRRRRRRRRRRR');
           menu = sortByMenuAll;
           console.log('menu set to all');
           break;

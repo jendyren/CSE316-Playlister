@@ -30,8 +30,8 @@ export const createPlaylist = (newListName, newSongs, userEmail, userName) => {
         userName: userName,
         songs: newSongs,
         isPublished: false,
-        likes: 0, 
-        dislikes: 0, 
+        likers: [], 
+        dislikers: [], 
         listens: 0,
         comments: []
     })
@@ -45,8 +45,8 @@ export const createDuplicatePlaylist = (newListName, newSongs, userEmail, userNa
         userName: userName,
         songs: newSongs,
         isPublished: false,
-        likes: 0, 
-        dislikes: 0, 
+        likers: [], 
+        dislikers: [], 
         listens: 0,
         comments: []
     })

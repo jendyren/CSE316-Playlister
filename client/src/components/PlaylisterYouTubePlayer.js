@@ -32,10 +32,9 @@ export default function YouTubePlayerExample(props) {
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
-    // console.log(store.currentList);
-    console.log("~~~~~~~~~~~~~~~~~~~~");
-    console.log(store.currentList);
-    console.log(currentPlaylist);
+    // console.log("^^^^^^^^^^^^^^")
+    // console.log(store.currentView);
+    // console.log("^^^^^^^^^^^^^^")
     if(store.currentList && currentPlaylist.songs){
         let songList = currentPlaylist.songs;
         console.log(songList);
@@ -63,7 +62,7 @@ export default function YouTubePlayerExample(props) {
 
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
-        if(currentSong <= currentPlaylist.songs.length){
+        if(currentSong <= currentPlaylist.songs.length - 1){
             currentSong++;
             // currentSong = currentSong % playlist.length;
             setCurrentSong(currentSong);

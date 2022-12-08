@@ -85,7 +85,7 @@ export default function SplashScreen() {
                 <div id="continue-guest">
                     <Typography sx={normalText}>
                         Just here to take a peek?
-                        <Button sx={normalText} onClick={handleGuest}> Continue as Guest</Button>
+                        <Button sx={normalText}> Continue as Guest</Button>
                     </Typography>
                 </div>
                 

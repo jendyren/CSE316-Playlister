@@ -18,14 +18,17 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import WorkspaceScreen from './WorkspaceScreen'
 
 
-const ListSection = () => {
+const ListSection = (props) => {
     const { store } = useContext(GlobalStoreContext);
     const [expandedId, setExpandedId] = useState(-1);
-
+    const {currentView} = props;
+    // console.log("^^^^^^^^^^^^^^")
+    // console.log(store.currentView);
+    // console.log("^^^^^^^^^^^^^^")
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
-
+    
     function handleExpandClick(id){
         console.log("inside handleExpand click");
         console.log("expandedId: " + expandedId);
@@ -33,15 +36,6 @@ const ListSection = () => {
         store.findPlaylistById(id);
         setExpandedId(expandedId === id ? -1 : id);
     };
-
-
-    // let workspace=""
-    // if(store.currentList){
-    //     workspace = <WorkspaceScreen
-    //         idNamePair={idNamePair}
-    //         published={published}
-    //     />
-    // }
 
     let listCard = "";
     if (store) {
@@ -74,25 +68,13 @@ const ListSection = () => {
                                 />
                             </IconButton>
                         </Box>
-                        {/* <Collapse in={expandedId === pair._id}  timeout="auto" unmountOnExit>
-                            <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
-                                <WorkspaceScreen
-                                    key={pair._id}
-                                    idNamePair={pair}
-                                    published={pair.isPublished}
-                                />
-                            </CardContent>
-                        </Collapse> */}
                     </CardContent> 
                 </Card>
             ))
             
         }
-        </List>;
-                
-        </>
-
-            
+        </List>;      
+        </>          
     }
     return (
         <div id="playlist-workspace">
@@ -108,25 +90,3 @@ const ListSection = () => {
 
 export default ListSection;
 
-
-
-{/* <Box>
-    <IconButton 
-        aria-label="expand" 
-        onClick={() => {
-            handleExpandClick(idNamePair._id)
-        }}
-        aria-expanded={expanded}
-        sx={{textAlign: 'right'}}>
-        <KeyboardDoubleArrowDownIcon 
-            aria-label="show more"
-            sx={{transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)'
-        }}
-        />
-    </IconButton>
-</Box>
-<Collapse in={expanded}  timeout="auto" unmountOnExit>
-    <CardContent sx={{width: '100%',minHeight: '300px', fontSize: '0.5em', display:'flex', flexDirection:'column'}}>
-        {workspace}
-    </CardContent>
-</Collapse> */}

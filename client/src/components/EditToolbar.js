@@ -6,6 +6,8 @@ import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import CloseIcon from '@mui/icons-material/HighlightOff';
 import { Box } from '@mui/material';
+import AuthContext from '../auth';
+
 
 /*
     This toolbar is a functional React component that
@@ -15,6 +17,8 @@ import { Box } from '@mui/material';
 */
 function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
     const { idNamePair, published} = props;
 
     console.log(published);
@@ -61,7 +65,7 @@ function EditToolbar(props) {
     }
 
     let toolbarButtons = ""
-    if(published){
+    if(published && (idNamePair.userName === auth.user.userName)){
         toolbarButtons = 
             <Box sx={{display:'flex', flexDirection:"row", backgroundColor: 'white'}}>
                 <Button
@@ -81,7 +85,20 @@ function EditToolbar(props) {
                         Duplicate
                 </Button>
             </Box>   
-    }else{
+    }else if(published && (idNamePair.userName !== auth.user.userName)){
+        toolbarButtons = 
+            <Box sx={{display:'flex', flexDirection:"row", backgroundColor: 'white'}}>
+                <Button
+                    id='duplicate-button' 
+                    onClick={(event) => {
+                        handleDuplicateList(event, idNamePair._id)
+                    }} 
+                    variant="contained">
+                        Duplicate
+                </Button>
+            </Box> 
+    }
+    else{
         toolbarButtons = 
         <Box sx={{display:'flex', flexDirection:"column", backgroundColor: 'white'}}>
             <Button

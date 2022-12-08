@@ -1,6 +1,7 @@
 const Playlist = require('../models/playlist-model')
 const User = require('../models/user-model');
-const auth = require('../auth')
+const auth = require('../auth');
+const { response } = require('express');
 /*
     This is our back-end API. It provides all the data services
     our database needs. Note that this file contains the controller
@@ -43,6 +44,7 @@ createPlaylist = (req, res) => {
                         })
                     })
                     .catch(error => {
+                        console.log(error);
                         return res.status(400).json({
                             errorMessage: 'Playlist Not Created!'
                         })
@@ -124,7 +126,7 @@ deletePlaylist = async (req, res) => {
                 else {
                     console.log("incorrect user!");
                     return res.status(400).json({ 
-                        errorMessage: "authentication error" 
+                        errorMessage: "authentication error in deletePlaylist" 
                     });
                 }
             });
@@ -157,11 +159,15 @@ getPlaylistById = async (req, res) => {
                 }
                 else {
                     console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
+                    return res.status(400).json({ success: false, description: "authentication error in getPlaylistById" });
                 }
             });
         }
-        asyncFindUser(list);
+        if(list.isPublished){
+            return res.status(200).json({ success: true, playlist: list })
+        }else{
+            asyncFindUser(list);
+        }
     }).catch(err => console.log(err))
 }
 
@@ -200,8 +206,8 @@ getPlaylistPairs = async (req, res) => {
                             userName: list.userName,
                             songs: list.songs,
                             isPublished: list.isPublished,
-                            likes: list.likes,
-                            dislikes: list.dislikes,
+                            likers: list.likers,
+                            dislikers: list.dislikers,
                             listens: list.listens,
                             comments: list.comments,
                         };
@@ -215,17 +221,14 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
-getPublicPlaylistPairs = async (req, res) => {
-    console.log("getting published playlist pairs");
-    await Playlist.findOne({isPublished: true }, (err, playlists) => {
-        async function asyncReturnPublicPairs() {
-            console.log("Playlists: " + JSON.stringify(playlists));
-            if (err) {
-                return res.status(400).json({ success: false, error: err })
-            }
-            else {
-                console.log("Send the Playlist pairs");
-                // PUT ALL THE LISTS INTO ID, NAME PAIRS
+getPublicPlaylistPairs = async (req,res) => {
+    await Playlist.find({isPublished: true}, (err,playlists)=>{
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }else {
+            async function asyncReturnPairs() {
+                console.log("Sending  Public Playlist pairs");
+                console.log(playlists);
                 let pairs = [];
                 for (let key in playlists) {
                     let list = playlists[key];
@@ -236,8 +239,8 @@ getPublicPlaylistPairs = async (req, res) => {
                         userName: list.userName,
                         songs: list.songs,
                         isPublished: list.isPublished,
-                        likes: list.likes,
-                        dislikes: list.dislikes,
+                        likers: list.likers,
+                        dislikers: list.dislikers,
                         listens: list.listens,
                         comments: list.comments,
                         datePublished: list.datePublished,
@@ -245,12 +248,13 @@ getPublicPlaylistPairs = async (req, res) => {
                     };
                     pairs.push(pair);
                 }
-                return res.status(200).json({ success: true, idNamePairs: pairs })
+                return res.status(200).json({ success: true, idNamePairs: pairs })   
             }
+            asyncReturnPairs();
         }
-        asyncReturnPublicPairs()
-    }).catch(err => console.log(err))
+    })
 }
+
 
 getPlaylists = async (req, res) => {
     if(auth.verifyUser(req) === null){
@@ -263,6 +267,7 @@ getPlaylists = async (req, res) => {
             return res.status(400).json({ success: false, error: err })
         }
         if (!playlists.length) {
+            
             return res
                 .status(404)
                 .json({ success: false, error: `Playlists not found` })
@@ -308,6 +313,13 @@ updatePlaylist = async (req, res) => {
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.likers = body.playlist.likers;
+                    list.dislikers = body.playlist.dislikers;
+                    list.isPublished = body.playlist.isPublished;
+                    list.songs = body.playlist.songs;
+                    list.comments = body.playlist.comments;
+                    list.datePublished = body.playlist.datePublished;
+
                     list
                         .save()
                         .then(() => {
@@ -327,8 +339,29 @@ updatePlaylist = async (req, res) => {
                         })
                 }
                 else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
+                    list.comments = body.playlist.comments;
+                    list.likers = body.playlist.likes;
+                    list.dislikers = body.playlist.dislikes;
+                    list.listens = body.playlist.listens;
+                    list
+                        .save()
+                        .then(() => {
+                            console.log("SUCCESS!!!");
+                            return res.status(200).json({
+                                success: true,
+                                id: list._id,
+                                message: 'Updated comments, likes, and dislike',
+                            })
+                        })
+                        .catch(error => {
+                            console.log("FAILURE: " + JSON.stringify(error));
+                            return res.status(404).json({
+                                error,
+                                message: 'Playlist was not updated!',
+                            })
+                        })
+                    // console.log("incorrect user!");
+                    // return res.status(400).json({ success: false, description: "authentication error in updatePlaylist" });
                 }
             });
         }
@@ -395,7 +428,7 @@ publishPlaylist = async (req, res) => {
                 }
                 else {
                     console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
+                    return res.status(400).json({ success: false, description: "authentication error in publishPlaylist" });
                 }
             });
         }

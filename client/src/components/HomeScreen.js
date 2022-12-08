@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListSection from './ListSection';
 import HomeBanner from './HomeBanner'
@@ -17,11 +17,12 @@ const HomeScreen = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
-  console.log("*********************");
-  console.log("Updated View is: ");
-  console.log(store.currentView);
-  console.log("*********************");
-  console.log(store.currentList);
+
+  // console.log("*********************");
+  // console.log("Updated View is: ");
+  // console.log(store.currentView);
+  // console.log("*********************");
+  // console.log(store.currentList);
 
   let currentPlaylist = {
     _id: Number,
@@ -39,7 +40,9 @@ const HomeScreen = () => {
   const homeListSection = (
     <>
     <Box sx={{display:'flex', flexDirection:'row'}}>
-        <ListSection/>
+        <ListSection
+          currentView={"HOME"}
+        />
         <YoutubeSection
             currentPlaylist={currentPlaylist}
         />
@@ -51,7 +54,9 @@ const HomeScreen = () => {
   const allUsersListSection = (
     <>
     <Box sx={{display:'flex', flexDirection:'row'}}>
-        <ListSection/>
+        <ListSection
+          currentView={"ALL_USER"}
+        />
         <YoutubeSection
             currentPlaylist={currentPlaylist}
         />

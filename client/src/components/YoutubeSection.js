@@ -15,15 +15,15 @@ const YoutubeSection = (props) => {
 
     const {currentPlaylist} = props;
 
-    console.log("++++++++++++++++++++");
-    console.log("Current Playlist is: ");
-    console.log(currentPlaylist);
+    // console.log("++++++++++++++++++++");
+    // console.log("Current Playlist is: ");
+    // console.log(currentPlaylist);
     
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    console.log(store.currentList);
+    // console.log(store.currentList);
 
 
     return (

@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -33,6 +34,8 @@ import WorkspaceScreen from './WorkspaceScreen'
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected, expandedId } = props;
@@ -77,6 +80,31 @@ function ListCard(props) {
     }
     function handleUpdateText(event) {
         setText(event.target.value);
+    }
+
+    function handleAddDislike(){
+        console.log("Adding Disliker")
+        store.findPlaylistById(idNamePair._id);
+        if(store.currentList){
+            let playlist = store.currentList;
+            console.log("*******");
+            console.log(playlist);
+            console.log(auth.user.userName)
+    
+            if (playlist.dislikers.includes(auth.user.username)){
+                playlist.dislikers.splice(playlist.dislikers.indexOf(auth.user.username),1)
+                
+            }else if (playlist.likers.includes(auth.user.username)){
+                playlist.dislikers.push(auth.user.username);
+                playlist.likers.splice(playlist.likers.indexOf(auth.user.username),1)
+            }else{
+                playlist.dislikers.push(auth.user.username);
+            }
+            
+            store.updateCurrentList(playlist);
+        }
+        
+        
     }
 
         
@@ -159,13 +187,13 @@ function ListCard(props) {
                                 <ThumbUpOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
                             </IconButton>
                             <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>
-                                {idNamePair.likes}
+                                {idNamePair.likers.length}
                             </Typography>
-                            <IconButton aria-label="dislike">
+                            <IconButton aria-label="dislike" onClick={handleAddDislike}>
                                 <ThumbDownOffAltOutlinedIcon style={{fontSize:'1.5em'}} />
                             </IconButton>
                             <Typography sx={{display: 'flex', alignItems: 'center', marginRight: '10px'}}>
-                                {idNamePair.dislikes}
+                                {idNamePair.dislikers.length}
                             </Typography>
                         </Box>
                     </Box>
